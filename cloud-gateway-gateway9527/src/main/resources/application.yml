@@ -1,0 +1,49 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true     #开启从注册中心动态创建路由的功能，利用微服务名进行路由
+      routes:
+        - id: payment_routh              #路由的ID，
+         # uri: http://localhost:8081      #匹配后提供服务的路由地址
+          uri: lb://CLOUD-PAYMENT-SERVER
+          predicates:
+            - Path=/payment/get/**      #断言，匹配http请求
+
+        - id: payment_routh2
+        #  uri: http://localhost:8081
+          uri: lb://CLOUD-PAYMENT-SERVER
+          predicates:
+          - Path=/payment/lb/**
+          - After=2017-01-20T17:42:47.789-07:00[America/Denver]    #时间格式为ZonedDateTime 如果断言返回true,网关将请求路由到URI
+          - Before=2017-01-20T17:42:47.789-07:00[America/Denver]   #如果当前请求的时间在配置的时间之前，此断言返回true，网关将请求路由到URI网站。否则，返回404
+          - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver] #当请求网关的时间在datatime1之后，在datetim2之前时，这个断言返回true，会将请求路由到URI
+          - Cookie=username, wgslcuky   #如果请求的Cookie中有name的值，并且根据name取出的值都匹配配置的正则表达式，这个断方就返回true，
+                                        #会将请求路由到URI网站。上面的配置就是表示Cookie中username的值是wgslucky时，断言返回true.
+          - Header=X-Request-Id, \d+     #如果请求的Header里面有name的值，并且它的值与配置的正则表达式匹配，则断言返回true，如果没有配置正则表达式的值，
+                                         #断言也是返回true（断方只检测带正则表达式的配置）,将会把请求路由到http://www.xinyues.com网站。上面的配置示例表示Header中必须有X-Request-Id,且它的值必须是数字。
+          - Host=**.somehost.org,**.anotherhost.org,{sub}.myhost.org   #注意，在配置Host的时候，如果Host不是80端口，在配置的时候也需要添加上端口。如：localhost:8080
+          - Method=GET                     #如果这个请求的方法名是GET，断言将返回true,将请求路由到
+          - Query=baz                       #如果请求的参数中包含baz参数，断言将返回true,并将请求路由到
+          - Query=foo, ba.          #如果请求的参数中包含foo，且它的值匹配ba.，断言将返回true,并将请求路径到
+          - RemoteAddr=192.168.1.1/24                #请求的客户端的ip地址是192.168.1.1到192.168.1.24的范围，此断言返回true,并将请求路由到
+
+
+
+# 注册Eureka服务
+eureka:
+  instance:
+    hostname: cloud-gateway-service
+  client:
+    # Eureka服务注册中心会将自己作为客户端来尝试注册它自己，必須禁止
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      #defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/
+      defaultZone: http://eureka7001.com:7001/eureka/

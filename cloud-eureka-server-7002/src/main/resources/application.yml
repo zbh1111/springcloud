@@ -1,0 +1,23 @@
+server:
+  port: 7002
+
+spring:
+  application:
+    name: cloud-eureka-server-7002
+
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+eureka:
+  instance:
+    hostname: eureka7002.com
+  client:
+    register-with-eureka: false                   #不向注册中心注册自己
+    fetch-registry: false                         #表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+  server:
+    enable-self-preservation: true    #开始自我保护机制，默认开启的
+    eviction-interval-timer-in-ms: 2000

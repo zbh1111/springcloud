@@ -1,0 +1,9 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: cloud-payment
+  cloud:
+    zookeeper:
+      connect-string: 192.

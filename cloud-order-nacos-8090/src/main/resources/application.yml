@@ -1,0 +1,10 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: cloud-nacos-order-8090
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848

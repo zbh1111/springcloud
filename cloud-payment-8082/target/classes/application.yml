@@ -1,0 +1,37 @@
+server:
+  port: 8082
+
+
+mybatis:
+  #对应实体类路径
+  type-aliases-package: com.springcloud.bean
+  #对应mapper映射文件路径
+  mapper-locations: classpath:mapper/*.xml
+
+
+
+spring:
+  messages:
+    basename: i18n/login
+  datasource:
+    #type: com.zaxxer.hikari.HikariDataSource (springboot 默认数据源)
+    url: jdbc:mysql://localhost:3306/idbooking?useSSL=true&serverTimezone=UTC
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    type: com.alibaba.druid.pool.DruidDataSource
+  application:
+    name: cloud-payment-server
+
+
+# 注册Eureka服务
+eureka:
+  client:
+    # Eureka服务注册中心会将自己作为客户端来尝试注册它自己，必須禁止
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/
+  instance:
+    instance-id: payment8082  #修改显示的服务名称
+    prefer-ip-address: true   #访问路径可以显示ip地址

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: aloud-nacos-member    #服务名称
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848     #注册地址
+
+
+server:
+  port: 8081
